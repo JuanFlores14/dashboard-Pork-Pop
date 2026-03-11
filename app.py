@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
@@ -14,33 +13,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ─────────────────────────────────────────────
-#  DETECTOR DE TEMA (inyecta data-theme en <html>)
-# ─────────────────────────────────────────────
-components.html("""
-<script>
-(function() {
-  function applyTheme() {
-    var app = window.parent.document.querySelector('.stApp');
-    if (!app) return;
-    var bg  = window.parent.getComputedStyle(app).backgroundColor;
-    var rgb = bg.match(/\\d+/g);
-    if (!rgb) return;
-    var brightness = +rgb[0] + +rgb[1] + +rgb[2];
-    var theme = brightness < 382 ? 'dark' : 'light';
-    window.parent.document.documentElement.setAttribute('data-theme', theme);
-  }
-  applyTheme();
-  setInterval(applyTheme, 400);
-  var app = window.parent.document.querySelector('.stApp');
-  if (app) {
-    new MutationObserver(applyTheme).observe(app, {
-      attributes: true, attributeFilter: ['style','class'], subtree: false
-    });
-  }
-})();
-</script>
-""", height=0)
 
 # ─────────────────────────────────────────────
 #  PALETA PORK&POP + MODO CLARO / OSCURO
@@ -50,8 +22,7 @@ st.markdown("""
 
 /* ══ 1. CUSTOM PROPERTIES ══════════════════════════════════════ */
 
-:root,
-[data-theme="light"] {
+:root {
   --p1 : #C24483;
   --p2 : #C7669D;
   --p3 : #D187B4;
@@ -83,59 +54,14 @@ st.markdown("""
   --ch-zero  : rgba(194,68,131,0.25);
 }
 
-[data-theme="dark"] {
-  --bg-app   : #0F0710;
-  --bg-card  : #1C0C1A;
-  --bg-card2 : #261420;
-  --bg-input : #1C0C1A;
-
-  --tx-hi    : #E8C1D9;
-  --tx-md    : #DDA6C8;
-  --tx-lo    : #9A6484;
-
-  --bd       : #3A1630;
-  --bd-str   : #C24483;
-
-  --ok       : #2ACA7A;
-  --warn     : #F5A623;
-  --bad      : #F06060;
-
-  --shadow   : rgba(0,0,0,0.45);
-  --shadow-h : rgba(0,0,0,0.65);
-
-  --ch-text  : #DDA6C8;
-  --ch-grid  : rgba(194,68,131,0.18);
-  --ch-zero  : rgba(194,68,131,0.35);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg-app   : #0F0710;
-    --bg-card  : #1C0C1A;
-    --bg-card2 : #261420;
-    --bg-input : #1C0C1A;
-    --tx-hi    : #E8C1D9;
-    --tx-md    : #DDA6C8;
-    --tx-lo    : #9A6484;
-    --bd       : #3A1630;
-    --bd-str   : #C24483;
-    --ok       : #2ACA7A;
-    --warn     : #F5A623;
-    --bad      : #F06060;
-    --shadow   : rgba(0,0,0,0.45);
-    --shadow-h : rgba(0,0,0,0.65);
-    --ch-text  : #DDA6C8;
-    --ch-grid  : rgba(194,68,131,0.18);
-    --ch-zero  : rgba(194,68,131,0.35);
-  }
-}
-
 /* ══ 2. BASE ═══════════════════════════════════════════════════ */
 
 html, body, [class*="css"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color-scheme: light !important;
 }
-.stApp {
+.stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
+[data-testid="block-container"] {
   background-color: var(--bg-app) !important;
 }
 
